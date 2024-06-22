@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "eslint": "9.x",
+    "globals": "^15.6.0"
+  },
+  "name": "express-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "description": "Node, express.js and mongoDB",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
