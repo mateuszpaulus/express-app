@@ -9,6 +9,7 @@ node_modules
 
 # Ignore files related to API keys
 .env
+config.env
 
 # Ignore SASS config files
 .sass-cache
