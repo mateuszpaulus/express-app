@@ -4,8 +4,15 @@ import pluginJs from "@eslint/js";
 
 export default [
   {
-    files: ["**/*.js"], languageOptions: {sourceType: "commonjs"},
-    "rules": {
+    files: ["**/*.js"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    rules: {
       "no-console": "warn",
       //* Avoid Bugs
       "no-undef": "error",
@@ -52,6 +59,5 @@ export default [
       "prefer-template": "warn"
     }
   },
-  {languageOptions: {globals: globals.browser}},
   pluginJs.configs.recommended,
 ];
