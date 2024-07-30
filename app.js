@@ -18,7 +18,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
