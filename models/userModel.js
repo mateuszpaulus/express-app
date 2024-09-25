@@ -37,9 +37,9 @@ const userSchema = new mongoose.Schema({
       message: 'Password are not the same!'
     }
   },
-  passwordChangeAt: Date,
+  passwordChangedAt: Date,
   passwordResetToken: String,
-  passwordResetExpire: Date,
+  passwordResetExpires: Date,
 });
 
 userSchema.pre('save', async function (next) {
@@ -53,14 +53,19 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
 userSchema.methods.changedPasswordAfter = async function (JWTTimestamp) {
   if (this.passwordChangedAt) {
-    console.log('passwordChangedAt', this.passwordChangedAt);
-
     const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
     return JWTTimestamp < changedTimestamp;
   }
@@ -70,8 +75,11 @@ userSchema.methods.changedPasswordAfter = async function (JWTTimestamp) {
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-  this.passwordResetExpire = Date.now() + (10 * 60 * 1000);
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  this.passwordResetExpires = Date.now() + (10 * 60 * 1000);
   return resetToken;
 };
 
